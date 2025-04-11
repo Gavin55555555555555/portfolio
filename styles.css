@@ -81,6 +81,7 @@ form{
 }
 
 h1{
+  display: grid;
   font-size: 400%;
 }
 
