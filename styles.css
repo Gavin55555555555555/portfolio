@@ -58,5 +58,15 @@ form{
 .projects{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  gap: 1em;
+  article{
+    gap: 1em;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+    h2{
+      margin:0;
+    }
+
+  }
 
 }
