@@ -30,6 +30,7 @@ nav{
     
   }
   a:hover{
+    background: yellow;
     border-bottom: solid;
     border-bottom-width: 0.4em;
     border-bottom-color: oklch(80% 3% 200);
