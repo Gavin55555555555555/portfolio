@@ -92,7 +92,9 @@ h1{
   grid-template-rows: repeat(auto-fill,240px);
   gap: 1em;
   h1{
-    column-span: all;
+    grid-column-start: 1;
+    grid-column-end:-1;
+    text-wrap-mode: nowrap;
   }
   ul{
     grid-row: span 2;
