@@ -94,6 +94,7 @@ h1{
   h1{
     grid-column-start: 1;
     grid-column-end:-1;
+    padding: 0;
     text-wrap-mode: nowrap;
   }
   ul{
@@ -101,7 +102,7 @@ h1{
     grid-column-start: 2;
   }
   p{
-    grid-column: span 2;
+    grid-row: span 2;
   }
 }
 
