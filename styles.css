@@ -89,12 +89,13 @@ h1{
 .resume{
   display:grid;
   grid-template-columns: 120px 1fr;
-  grid-template-rows: repeat(auto-fill,240px);
+  grid-template-rows: repeat(auto-fill,120px);
   gap: 1em;
   h1{
     grid-column-start: 1;
     grid-column-end:-1;
     text-wrap-mode: nowrap;
+    align-content: center;
     font-size: 250%;
   }
   ul{
