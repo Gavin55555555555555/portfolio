@@ -44,16 +44,6 @@ nav{
   }
 }
 
-input{
-  font:inherit;
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  margin-block: 5px 10px;
-}
-textarea{
-  font:inherit;
-}
-button{
-  font:inherit; 
+form{
+  display: grid;
 }
