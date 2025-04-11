@@ -57,6 +57,6 @@ form{
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
-    text-align: center;
+    justify-items: center;
   }
 }
