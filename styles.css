@@ -46,4 +46,17 @@ nav{
 
 form{
   display: grid;
+  grid-template-columns: auto 1fr;
+  input{
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  textarea{
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  button{
+    display: grid;
+    grid-template-columns: subgrid;
+  }
 }
