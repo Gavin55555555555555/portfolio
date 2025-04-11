@@ -83,6 +83,14 @@ h1{
 .resume{
   display:grid;
   grid-template-columns: 120px 1fr;
+  gap: 1em;
+  h1{
+    column-span: 1/-1
+  }
+  ul{
+    grid-row: span 2;
+    grid-column-start: 2;
+  }
 }
 
  
