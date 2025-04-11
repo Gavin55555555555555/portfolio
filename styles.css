@@ -87,7 +87,7 @@ h1{
 .resume{
   display:grid;
   grid-template-columns: 120px 1fr;
-  grid-template-rows: repeat(auto,240px);
+  grid-template-rows: repeat(auto-fill,240px);
   gap: 1em;
   h1{
     column-span: 1/-1;
