@@ -50,13 +50,16 @@ form{
   input{
     display: grid;
     grid-template-columns: subgrid;
+    grid-column: 1 / -1;
   }
   textarea{
     display: grid;
     grid-template-columns: subgrid;
+    grid-column: 1 / -1;
   }
   button{
     display: grid;
     grid-template-columns: subgrid;
+    grid-column: 1 / -1;
   }
 }
