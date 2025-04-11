@@ -27,13 +27,16 @@ nav{
     color: inherit;
     text-align: center;
     padding: 0.5em;
-    &:hover {
-      border-bottom-width: 0.4em;
-      border-bottom-color: var(--color-accent);
-      padding-bottom: 0.1em;
-    }
+    
+  }
+  a:hover{
+    border-bottom: solid;
+    border-bottom-width: 0.4em;
+    border-bottom-color: oklch(80% 3% 200);
+    padding-bottom: 0.1em;
   }
   a.current{
+    border-bottom: solid;
     border-bottom-width: 0.4em;
     border-bottom-color: oklch(80% 3% 200);
     padding-bottom: 0.1em;
