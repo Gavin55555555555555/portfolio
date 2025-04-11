@@ -90,7 +90,7 @@ h1{
   grid-template-rows: repeat(auto,240px);
   gap: 1em;
   h1{
-    column-span: 1/-1
+    column-span: 1/-1;
   }
   ul{
     grid-row: span 2;
