@@ -7,8 +7,8 @@ function $$(selector, context = document) {
 let pages = [
   { url: '', title: 'Home' },
   { url: 'projects/', title: 'Projects' },
-  { url: 'projects/', title: 'Contact' },
-  { url: 'projects/', title: 'Resume' }
+  { url: 'contact/', title: 'Contact' },
+  { url: 'resume/', title: 'Resume' }
 ];
 
 let nav = document.createElement('nav');
