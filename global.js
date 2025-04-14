@@ -8,7 +8,8 @@ let pages = [
   { url: '', title: 'Home' },
   { url: 'projects/', title: 'Projects' },
   { url: 'contact/', title: 'Contact' },
-  { url: 'resume/', title: 'Resume' }
+  { url: 'resume/', title: 'Resume' },
+  {url: 'https://github.com/Gavin55555555555555', title: 'GitHub'}
 ];
 
 let nav = document.createElement('nav');
