@@ -22,7 +22,7 @@ nav{
   margin-bottom: 1em;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: oklch(80% 3% 200);
+  border-bottom-color: oklch(50% 10% 200 / 40%);
 
 
   a{
