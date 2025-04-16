@@ -1,3 +1,7 @@
+:root{
+  color-scheme: dark;
+}
+
 html{
   --color-accent: oklch(65% 50% 0);
 }
