@@ -56,3 +56,17 @@ select.addEventListener('input', function (event) {
   console.log('color scheme changed to', event.target.value);
   ocument.documentElement.style.setProperty('color-scheme', event.target.value);
 });
+
+let form = document.getElementById("contact_form");
+form?.addEventListener("submit", function(event){
+  event.preventDefault();
+  let data = document.createElement("FormData");
+  for (let [name, value] of data) {
+    // TODO build URL parameters here
+    console.log(name, value);
+  }
+
+}
+
+
+);
