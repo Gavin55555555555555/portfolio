@@ -61,8 +61,8 @@ let form = document.getElementById("contact_form");
 form?.addEventListener("submit", function(event){
   event.preventDefault();
   let data = new FormData(form);
-  url_addr = "mailto:gawu@ucsd.edu?subject=" + data.get("subject") + "&body=" + data.get("body") + "?";
-  url = new URL(url_addr);
+  let url_addr = "mailto:gawu@ucsd.edu?subject=" + data.get("subject") + "&body=" + data.get("body");
+  let url = new URL(url_addr);
   location.href = url;
 }
 
