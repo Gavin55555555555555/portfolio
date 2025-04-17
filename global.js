@@ -60,9 +60,8 @@ select.addEventListener('input', function (event) {
 let form = document.getElementById("contact_form");
 form?.addEventListener("submit", function(event){
   event.preventDefault();
-  let data = FormData(form);
+  let data = new FormData(form);
   for (let [name, value] of data) {
-    // TODO build URL parameters here
     console.log(name, value);
   }
 
