@@ -113,7 +113,7 @@ h1{
 
 label.color-scheme{
   position: absolute;
-  offset-position: top 1rem right 1rem;
+  offset: top 1rem right 1rem;
   font-family: inherit;
   font-size: 80%;
 }
