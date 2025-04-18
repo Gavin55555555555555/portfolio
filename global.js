@@ -58,8 +58,9 @@ select.addEventListener('input', function (event) {
 });
 
 if ("colorScheme" in localStorage){
+  select.value = localStorage.getItem("colorScheme");
   document.documentElement.style.setProperty("color-scheme",localStorage.getItem("colorScheme"));
-  select.option.value = localStorage.getItem("colorScheme");
+  
   
 }
 
