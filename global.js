@@ -51,11 +51,19 @@ document.body.insertAdjacentHTML(
   </label>`
 );
 
+let localstorage = localStorage();
 let select = document.getElementsByClassName("color-scheme")[0];
 select.addEventListener('input', function (event) {
   console.log('color scheme changed to', event.target.value);
   document.documentElement.style.setProperty('color-scheme', event.target.value);
+  localstorage.colorScheme = event.target.value;
 });
+
+if ("colorScheme" in localstorage){
+  document.documentElement.style.setProperty("color-scheme",localstorage.get("colorScheme"));
+  select.value = localstorage.get("colorScheme");
+
+}
 
 let form = document.getElementById("contact_form");
 form?.addEventListener("submit", function(event){
