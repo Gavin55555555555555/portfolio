@@ -50,7 +50,7 @@ document.body.insertAdjacentHTML(
     </select>
   </label>`
 );
-let select = document.getElementsByClassName("color-scheme")[0];
+let select = document.querySelector(".color-scheme select");
 select.addEventListener('input', function (event) {
   console.log('color scheme changed to', event.target.value);
   document.documentElement.style.setProperty('color-scheme', event.target.value);
@@ -58,10 +58,9 @@ select.addEventListener('input', function (event) {
 });
 
 if ("colorScheme" in localStorage){
-  document.addEventListener("DOMContentLoaded", function () {
   select.value = localStorage.getItem("colorScheme");
   document.documentElement.style.setProperty("color-scheme",localStorage.getItem("colorScheme"));
-  });
+  
   
 }
 
