@@ -57,6 +57,9 @@ form{
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
   }
+  textarea{
+    font-family: inherit;
+  }
   button{
     grid-column: 1/-1;
     text-align: center;
