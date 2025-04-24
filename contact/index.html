@@ -10,7 +10,7 @@
         const scripts = document.getElementsByClassName("code");
         for(const script of scripts){
             script.onerror = function (){
-                script.src = "/portfolio/" + script.src;
+                script.src = "/portfolio/" + script.src.location.pathname;
             }
         };
     </script>
