@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gavin Wu: Personal Site and Portfolio</title>
     <link rel="stylesheet" href="styles.css">
-    <script type = "module", src = "global.js"></script>
-    <script type = "module", src = "index.js"></script>
+    <script type = "module", src = "global.js" class = "code"></script>
+    <script type = "module", src = "index.js" class = "code"></script>
+    <script>
+        const scripts = document.getElementsByClassName("code");
+        for(const script of scripts){
+            script.onerror = function (){
+                script.src = "/portfolio/" + script.src;
+            }
+        };
+    </script>
 </head>
 <body>
     <div class = "introduction">
@@ -17,7 +25,6 @@
         <img src = "images/UCSD.jpg", alt = "It's the school I go to.", width = 1000px>
     </div>
     <div class = "github">
-        <h2>GitHub Statistics</h2>
     </div>
 </body>
 </html>

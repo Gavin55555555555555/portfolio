@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Page</title>
-    <link rel="stylesheet" href="/styles.css">
-    <script type = "module", src = "/global.js"></script>
+    <link rel="stylesheet" href="/styles.css" class = "code">
+    <script type = "module", src = "/global.js" class = "code"></script>
+    <script>
+        const scripts = document.getElementsByClassName("code");
+        for(const script of scripts){
+            script.onerror = function (){
+                script.src = "/portfolio/" + script.src;
+            }
+        };
+    </script>
 </head>
 <body>
    
