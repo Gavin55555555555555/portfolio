@@ -119,4 +119,25 @@ label.color-scheme{
   font-family: inherit;
   font-size: 80%;
 }
+
+.stats{
+  display: grid;
+  grid-template-rows : 50px 50px;
+  grid-template-columns: repeat(5,20%);
+  img{
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 1;
+  }
+  dt{
+    text-align: justify;
+    grid-row-start: 1;
+
+  }
+  dd{
+    text-align: justify;
+    grid-row-start: 2;
+  }
+ 
+}
  
