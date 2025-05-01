@@ -140,4 +140,37 @@ label.color-scheme{
   }
  
 }
- 
+#projects-plot{
+  max-width: 20em;
+  max-height: 20em;
+  margin-block: 2em;
+  overflow: visible;
+}
+.container{
+  display: flex;
+  gap: 50px;
+  align-items: center;
+}
+ul.legend{
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  border-style: solid;
+  border-color: oklch(50% 10% 200 / 40%);
+  
+  .swatch{
+    width : 20px;
+    aspect-ratio: 1/1;
+    background-color: var(--color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+  }
+  .legend_element{
+    display: flex;
+    min-width: 50px;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+  }
+}
