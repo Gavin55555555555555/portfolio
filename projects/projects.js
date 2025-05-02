@@ -113,8 +113,6 @@ function renderPieChart(projects){
     .on('click', () => {
       let paths = document.querySelectorAll('path');
       let legend_elements = document.querySelector('.legend').querySelectorAll('li');
-      console.log(legend_elements);
-      console.log(paths);
       selectedIndex = selectedIndex === i ? -1 : i;
       for(let i = 0; i < paths.length; i++ ){
         if(i === selectedIndex){
@@ -126,8 +124,21 @@ function renderPieChart(projects){
           legend_elements[i].classList.remove("selected");
         }
       }
-      
+      console.log(projects);
+      // Filtering out Projects 
+      if (selectedIndex === -1) {
+        renderProjects(projects, projectsContainer, 'h2');
+      } else {
+        let year = legend_elements[i].innerText.substring(0,4);
+        let contains = function(proj){
+          return proj.year.trim().includes(year.trim());
+        }
+        let filtered_projects_by_year = projects.filter(contains);
+        console.log(filtered_projects_by_year);
+        renderProjects(filtered_projects_by_year,projectsContainer,'h2');
+      }
     });
+
 });
 }
 renderPieChart(projects);
@@ -136,19 +147,19 @@ let query = '';
 let searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', (event) => {
+  let selected = document.querySelector('li.selected');
   query = searchInput.value;
-  console.log(query);
   query = event.target.value;
   // TODO: filter the projects
-  console.log(projects);
   let contains = function(proj){
     let all_text = Object.values(proj).join('\n').toLowerCase();
     return all_text.includes(query.toLowerCase());
   }
   let filtered_projects = projects.filter(contains);
-  console.log(filtered_projects);
-  renderProjects(filtered_projects,projectsContainer,'h2');
   renderPieChart(filtered_projects);
+  renderProjects(filtered_projects,projectsContainer,'h2');
+  
+
 });
 
 
