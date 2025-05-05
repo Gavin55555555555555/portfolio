@@ -110,6 +110,7 @@ function renderPieChart(projects){
     .append('path')
     .attr('d', arc)
     .attr('fill', colors(i))
+    .attr('class', "y" + data[i].label)
     .on('click', () => {
       let paths = document.querySelectorAll('path');
       let legend_elements = document.querySelector('.legend').querySelectorAll('li');
@@ -147,7 +148,6 @@ let query = '';
 let searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', (event) => {
-  let selected = document.querySelector('li.selected');
   query = searchInput.value;
   query = event.target.value;
   // TODO: filter the projects
@@ -158,7 +158,6 @@ searchInput.addEventListener('input', (event) => {
   let filtered_projects = projects.filter(contains);
   renderPieChart(filtered_projects);
   renderProjects(filtered_projects,projectsContainer,'h2');
-  
 
 });
 
