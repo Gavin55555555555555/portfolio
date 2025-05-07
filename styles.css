@@ -192,3 +192,48 @@ path {
     fill: var(--color);
   }
 }
+g.gridlines{
+  opacity: 0.2;
+  
+}
+dl.info{
+  display: grid;
+  dt{
+    grid-column-start: 1;
+  }
+  dd{
+    grid-column-start: 2;
+  }
+}
+.tooltip{
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 10px;
+  border-radius: 10%;
+  padding: auto;
+}
+
+circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+circle:hover {
+  transform: scale(1.5);
+}
+
+dl.info {
+  /* ... other styles ... */
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+  
