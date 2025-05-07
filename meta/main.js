@@ -104,16 +104,20 @@ function renderCommitInfo(data, commits) {
   dl.append('dd').text(maxDepth);
 }
 function renderTooltipContent(commit) {
+  //console.log(commit);
   const link = document.getElementById('commit-link');
   const date = document.getElementById('commit-date');
+  const lines = document.getElementById('commit-lines');
 
   if (Object.keys(commit).length === 0) return;
 
   link.href = commit.url;
   link.textContent = commit.id;
+  console.log(commit.id);
   date.textContent = commit.datetime?.toLocaleString('en', {
     dateStyle: 'full',
   });
+  //lines.textContent = d.totalLines;
 }
 function updateTooltipVisibility(isVisible) {
   const tooltip = document.getElementById('commit-tooltip');
@@ -126,6 +130,7 @@ function updateTooltipPosition(event) {
 }
 
 function renderScatterPlot(data, commits) {
+  commits = d3.sort(commits, (d) => -d.totalLines);
   const width = 1000;
   const height = 600;
   const margin = { top: 10, right: 10, bottom: 30, left: 20 };
@@ -137,7 +142,13 @@ function renderScatterPlot(data, commits) {
     width: width - margin.left - margin.right,
     height: height - margin.top - margin.bottom,
   };
-  let svg = d3.select('#chart')
+  const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+  const rScale = d3
+    .scaleSqrt()
+    .domain([minLines, maxLines])
+    .range([2, 30]);
+
+  const svg = d3.select('#chart')
     .append('svg')
     .attr('viewBox', `0 0 ${width} ${height}`)
     .style('overflow', 'visible');
@@ -153,16 +164,17 @@ function renderScatterPlot(data, commits) {
     .join('circle')
     .attr('cx',(d) => xScale(d.datetime))
     .attr('cy',(d) => yScale(d.hourFrac))
-    .attr('r',5)
+    .attr('r',(d) => rScale(d.totalLines))
     .attr('fill','steelblue')
-    .on('mouseenter',() => {
-      renderTooltipContent(commits);
+    .attr('fill-opacity',(d) =>  1- rScale(d.totalLines)/30)
+    .on('mouseenter',(event,d) => {
+      renderTooltipContent(d);
       updateTooltipVisibility(true);
       updateTooltipPosition(event);
     })
     .on('mouseleave', () => {
       updateTooltipVisibility(false);
-    })
+    });
   // Add gridlines BEFORE the axes
   const gridlines = svg
     .append('g')
@@ -199,6 +211,5 @@ function renderScatterPlot(data, commits) {
   renderCommitInfo(data, commits);
 
   renderScatterPlot(data, commits);
-  console.log(data);
-  console.log("doodoo");
+  console.log(commits);
   
