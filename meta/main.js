@@ -129,6 +129,7 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
+
 function renderScatterPlot(data, commits) {
   commits = d3.sort(commits, (d) => -d.totalLines);
   const width = 1000;
@@ -197,19 +198,27 @@ function renderScatterPlot(data, commits) {
     .attr('transform', `translate(${usableArea.left}, 0)`)
     .call(yAxis);
   
-  //s
-  
+  //createBrushSelector(svg);
+}
+
+function isCommitSelected(selection, commit) {
+  if (!selection) {
+    return false;
+  }
+  if(commit in selection){
+    return true;
+  }
+  return false;
 }
    
-   
 
 
-  let data = await loadData();
+let data = await loadData();
 
-  let commits = processCommits(data);
+let commits = processCommits(data);
 
-  renderCommitInfo(data, commits);
+renderCommitInfo(data, commits);
 
-  renderScatterPlot(data, commits);
-  console.log(commits);
+renderScatterPlot(data, commits);
+console.log(commits);
   
