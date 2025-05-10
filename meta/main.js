@@ -154,10 +154,9 @@ function brushed(event) {
 
 function createBrushSelector(svg) {
   const brush = d3.brush()
-    .on('start',brushed)
-    .on('brush',brushed)
-    .on('end',brushed)
+    .on('start brush end',brushed)
   svg.call(brush);
+  svg.selectAll('.dots, .overlay ~ *').raise();
   svg.selectAll('.dots, .overlay ~ *').raise();
   
 }
@@ -282,6 +281,7 @@ function renderScatterPlot(data, commits) {
   const b = svg.append('g').attr('class', 'brush');
   console.log(b);
   createBrushSelector(b);
+  svg.selectAll('.dots, .overlay ~ *').raise();
 }
 
 
