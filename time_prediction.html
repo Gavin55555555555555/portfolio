@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movement Prediction</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      display: flex;
+      gap: 40px;
+    }
+    .controls {
+      flex: 1;
+      order: 2;
+    }
+    .slider-container {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    output {
+      font-weight: bold;
+    }
+    svg {
+      flex: 0 0 500px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Bar Chart Area -->
+  <svg width="500" height="250"></svg>
+
+  <div class="controls">
+    <h2>Predict Your Movement (NoMus-Mus Diff)</h2>
+
+    <div class="slider-container">
+      <label>Music Listening Hours: <output id="music_val">10</output></label>
+      <input type="range" id="music" min="0" max="100" step="1" value="10">
+    </div>
+
+    <div class="slider-container">
+      <label>Performance Hours: <output id="perf_val">10</output></label>
+      <input type="range" id="perf" min="0" max="100" step="1" value="10">
+    </div>
+
+    <div class="slider-container">
+      <label>Dance Hours: <output id="dance_val">10</output></label>
+      <input type="range" id="dance" min="0" max="100" step="1" value="10">
+    </div>
+
+    <div class="slider-container">
+      <label>Exercise Hours: <output id="exer_val">10</output></label>
+      <input type="range" id="exer" min="0" max="100" step="1" value="10">
+    </div>
+
+    <h3>Predicted NoMus-Mus Diff: <span id="prediction">0.00</span></h3>
+  </div>
+
+  <script>
+    const weights = {
+      music: 0.20,
+      perf: 0.30,
+      dance: 0.22,
+      exer: 0.28,
+      intercept: 0.28
+    };
+
+    const sliders = ['music', 'perf', 'dance', 'exer'];
+
+    sliders.forEach(id => {
+      d3.select(`#${id}`).on('input', update);
+    });
+
+    const svg = d3.select("svg");
+    const barWidth = 70;
+
+    function update() {
+      let inputs = {};
+      sliders.forEach(id => {
+        const val = +d3.select(`#${id}`).property('value');
+        d3.select(`#${id}_val`).text(val);
+        inputs[id] = val;
+      });
+
+      const prediction = weights.intercept +
+        weights.music * inputs.music +
+        weights.perf * inputs.perf +
+        weights.dance * inputs.dance +
+        weights.exer * inputs.exer;
+
+      d3.select('#prediction').text(prediction.toFixed(3));
+
+      const maxY = Math.max(100, prediction); 
+
+      const data = sliders.map(id => ({
+        id: id,
+        value: inputs[id]
+      }));
+      data.push({ id: 'diff', value: prediction });
+
+      const yScale = d3.scaleLinear()
+        .domain([0, maxY])
+        .range([220, 0]);
+
+      const bars = svg.selectAll("rect")
+        .data(data);
+
+      bars.enter()
+        .append("rect")
+        .merge(bars)
+        .attr("x", (d, i) => i * (barWidth + 10) + 30)
+        .attr("y", d => yScale(d.value))
+        .attr("width", barWidth)
+        .attr("height", d => 220 - yScale(d.value))
+        .attr("fill", d => d.id === 'diff' ? 'orange' : 'steelblue');
+
+      const labels = svg.selectAll("text")
+        .data(data);
+
+      labels.enter()
+        .append("text")
+        .merge(labels)
+        .attr("x", (d, i) => i * (barWidth + 10) + 30 + barWidth / 2)
+        .attr("y", d => Math.max(yScale(d.value) - 5, 10))
+        .attr("text-anchor", "middle")
+        .text(d => d.value.toFixed(1));
+    }
+
+    update();
+  </script>
+</body>
+</html>
