@@ -129,7 +129,6 @@ function updateTooltipPosition(event) {
 }
 // Brush
 function isCommitSelected(selection, commit) {
-  console.log(selection);
   if (!selection) {
     return false;
   }
@@ -464,14 +463,22 @@ input.on("input", (event) =>
       .groups(lines, (d) => d.file)
       .map(([name, lines]) => {
       return { name, lines };
-    });
+    })
+    .sort((a, b) => b.lines.length - a.lines.length);
     console.log(files);
 
     d3.select('.files').selectAll('div').remove(); 
     let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
-
-    filesContainer.append('dt').append('code').text(d => files["name"]); 
-    filesContainer.append('dd').text(d => files[d]); 
+    console.log(files);
+    filesContainer.append('dt').append('code').text(d => d.name); 
+    let colors = d3.scaleOrdinal(d3.schemeTableau10);
+    filesContainer.append('dd')
+              .selectAll('div')
+              .data(d =>  d.lines)
+              .join('div')
+              .attr('class', 'line')
+              .attr('style', (d) => `--color: ${colors(d.type)}`);
+              
 
     updateCommitInfo(data, filteredCommits);
     updateScatterPlot(data, filteredCommits,commitMaxTime);
@@ -481,6 +488,44 @@ input.on("input", (event) =>
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+
+
+d3.select('#scatter-story')
+  .selectAll('.step')
+  .data(commits)
+  .join('div')
+  .attr('class', 'step')
+  .html(
+    (d, i) => `
+		On ${d.datetime.toLocaleString('en', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+    })},
+		I made <a href="${d.url}" target="_blank">${
+      i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
+    }</a>.
+		I edited ${d.totalLines} lines across ${
+      d3.rollups(
+        d.lines,
+        (D) => D.length,
+        (d) => d.file,
+      ).length
+    } files.
+		Then I looked over all I had made, and I saw that it was very good.
+	`,
+  );
+
+  function onStepEnter(response) {
+    console.log(response.element.__data__.datetime);
+  }
+  
+  const scroller = scrollama();
+  scroller
+    .setup({
+      container: '#scrolly-1',
+      step: '#scrolly-1 .step',
+    })
+    .onStepEnter(onStepEnter);
 
 
 

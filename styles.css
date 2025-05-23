@@ -259,4 +259,61 @@ circle.selected {
 input{
   width: 50%;
 }
+dl.files{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.files > div {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+
+  
+  .line {
+    display: flex;
+    width: 0.5em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: steelblue;
+    background-color: var(--color);
+    
+  }
+  
+  dd {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    align-content: start;
+    gap: 0.15em;
+    padding-top: 0.6em;
+    margin-left: 0;
+  }
+  dt{
+    display: subgrid;
+  }
+}
+
+#scrolly-1 {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+
+  > * {
+    flex: 1;
+  }
+}
+
+#scatter-story {
+  position: relative;
+}
+
+#scatter-plot {
+  position: sticky;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  height: 50vh;
+}
 
