@@ -11,6 +11,12 @@
     <div> <h1>Meta</h1></div>
     <div class id = "stats"></div>
     <h2>Commits by time of day</h2>
+    <label>
+      Show commits until: 
+      <input type = range min = 0 max = 100 value = 100>
+      <time></time>
+    </label>
+
     <div id="chart">
         <dl id="commit-tooltip" class="info tooltip" hidden>
             <dt>Commit</dt>
@@ -27,6 +33,26 @@
     </div>
     <p id="selection-count">No commits selected</p>
     <dl id="language-breakdown" class="stats"></dl>
+    <dl class="files">
+  <!-- we want the following structure for each file-->
+  <div>
+    <dt>
+      <code>{file.name}</code>
+    </dt>
+    <dd>{file.lines.length} lines</dd>
+  </div>
+  <div>...</div>
+</dl>
 
+<dl class="files">
+  <!-- we want the following structure for each file-->
+  <div>
+    <dt>
+      <code>{file.name}</code>
+    </dt>
+    <dd>{file.lines.length} lines</dd>
+  </div>
+  <div>...</div>
+</dl>
 
 </body>

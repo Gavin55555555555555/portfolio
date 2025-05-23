@@ -228,7 +228,6 @@ function renderScatterPlot(data, commits) {
     .scaleSqrt()
     .domain([minLines, maxLines])
     .range([2, 30]);
-
   const svg = d3.select('#chart')
     .append('svg')
     .attr('viewBox', `0 0 ${width} ${height}`)
@@ -279,20 +278,211 @@ function renderScatterPlot(data, commits) {
     .call(yAxis);
   
   const b = svg.append('g').attr('class', 'brush');
-  console.log(b);
   createBrushSelector(b);
   svg.selectAll('.dots, .overlay ~ *').raise();
+}
+
+function updateScatterPlot(data, commits,maxTime) {
+  commits = d3.sort(commits, (d) => -d.totalLines);
+  const width = 1000;
+  const height = 600;
+  const margin = { top: 10, right: 10, bottom: 30, left: 20 };
+  const usableArea = {
+    top: margin.top,
+    right: width - margin.right,
+    bottom: height - margin.bottom,
+    left: margin.left,
+    width: width - margin.left - margin.right,
+    height: height - margin.top - margin.bottom,
+  };
+  const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+  const rScale = d3
+    .scaleSqrt()
+    .domain([minLines, maxLines])
+    .range([2, 30]);
+  
+  d3.select('svg').remove();
+  const svg = d3.select('#chart')
+    .append('svg')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .style('overflow', 'visible');
+  xScale = d3
+    .scaleTime()
+    .domain(d3.extent(commits, (d) => d.datetime))
+    .range([usableArea.left, usableArea.right])
+    .nice();
+  yScale = d3.scaleLinear().domain([0, 24]).range([usableArea.bottom, usableArea.top]);
+  svg.selectAll('g').remove();
+  const dots = svg.append('g').attr('class', 'dots');
+  dots.selectAll('circle').remove();
+  dots.selectAll('circle')
+    .data(commits)
+    .join('circle')
+    .attr('cx',(d) => xScale(d.datetime))
+    .attr('cy',(d) => yScale(d.hourFrac))
+    .attr('r',(d) => rScale(d.totalLines))
+    .attr('fill','steelblue')
+    .attr('fill-opacity',(d) =>  1- rScale(d.totalLines)/30)
+    .on('mouseenter',(event,d) => {
+      renderTooltipContent(d);
+      updateTooltipVisibility(true);
+      updateTooltipPosition(event);
+    })
+    .on('mouseleave', () => {
+      updateTooltipVisibility(false);
+    })
+  // Add gridlines BEFORE the axes
+  const gridlines = svg
+    .append('g')
+    .attr('class', 'gridlines')
+    .attr('transform', `translate(${usableArea.left}, 0)`);
+  
+  gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
+  // Create the axes
+  let xAxis = d3.axisBottom(xScale);
+  let yAxis = d3.axisLeft(yScale).tickFormat((d) => String(d % 24).padStart(2, '0') + ':00');;
+
+  // Add X axis
+  svg
+    .append('g')
+    .attr('transform', `translate(0, ${usableArea.bottom})`)
+    .call(xAxis);
+  // Add Y axis
+  svg
+    .append('g')
+    .attr('transform', `translate(${usableArea.left}, 0)`)
+    .call(yAxis);
+  
+  const b = svg.append('g').attr('class', 'brush');
+  createBrushSelector(b);
+  svg.selectAll('.dots, .overlay ~ *').raise();
+}
+
+function updateCommitInfo(data, commits) {
+  // Create the dl element
+  d3.select('#stats').html("");
+  const dl = d3.select('#stats').append('dl').attr('class', 'stats');
+  
+  // Add total LOC
+  dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
+  dl.append('dd').text(data.length);
+  
+  // Add total commits
+  dl.append('dt').text('Total commits');
+  dl.append('dd').text(commits.length);
+  
+  // Add more stats as needed...
+  let weekdays = {
+      0 : 0, //Sun
+      1 : 0,
+      2 : 0,
+      3 : 0,
+      4 : 0,
+      5 : 0,
+      6 : 0 //Sat
+  }
+  let numToDay = {
+      0 : 'Sunday',
+      1 : 'Monday',
+      2 : 'Tuesday',
+      3 : 'Wednesday',
+      4 : 'Thursday',
+      5 : 'Friday',
+      6 : 'Saturday' //Sat
+  }
+  let mostCommonDay;
+  let meanTime = 0;
+  let maxDepth = 0;
+  for(let i = 0; i < commits.length; i++){
+      meanTime += commits[i]['hourFrac']/commits.length;
+      weekdays[commits[i]['date'].getDay()] += 1;
+      if(commits[i]['depth'] > maxDepth){
+        maxDepth = commits[i]['depth'];
+      }
+  }
+  mostCommonDay = 0;
+  for(let i = 1; i < 7; i++){
+      console.log(weekdays[i]);
+      if(weekdays[mostCommonDay] < weekdays[i]){
+          mostCommonDay = i;
+      }
+  }
+  mostCommonDay = numToDay[mostCommonDay];
+  console.log(mostCommonDay);
+
+
+    
+  dl.append('dt').text('Day Most Work is Done');
+  dl.append('dd').text(mostCommonDay);
+
+  dl.append('dt').text('Average time Work is Done');
+  dl.append('dd').text(meanTime);
+
+  dl.append('dt').text('Max Depth');
+  dl.append('dd').text(maxDepth);
 }
 
 
    
 
 
+
+
+
+   
+
+
+
 let data = await loadData();
 
 let commits = processCommits(data);
 
+let commitProgress = 100;
+
+let timeScale = d3.scaleTime(
+  [d3.min(commits, (d) => d.datetime), d3.max(commits, (d) => d.datetime)],
+  [0, 100],
+);
+let commitMaxTime = timeScale.invert(commitProgress);
+let input = d3.select("input");
+let time = d3.select("time");
+
+
+
+input.on("input", (event) =>
+  {
+    let val = input.property("value");
+    time.html(timeScale.invert(val).toLocaleString());
+    commitMaxTime = timeScale.invert(val);
+    let filteredCommits = commits.filter(
+      (commit) => commit.date < commitMaxTime
+    );
+
+    let lines = filteredCommits.flatMap((d) => d.lines);
+    let files = [];
+    files = d3
+      .groups(lines, (d) => d.file)
+      .map(([name, lines]) => {
+      return { name, lines };
+    });
+    console.log(files);
+
+    d3.select('.files').selectAll('div').remove(); 
+    let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
+
+    filesContainer.append('dt').append('code').text(d => files["name"]); 
+    filesContainer.append('dd').text(d => files[d]); 
+
+    updateCommitInfo(data, filteredCommits);
+    updateScatterPlot(data, filteredCommits,commitMaxTime);
+  });
+
+  
+
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+
+
+
 
   

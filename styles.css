@@ -217,8 +217,10 @@ dl.info{
 
 circle {
   transition: 200ms;
+  
   transform-origin: center;
   transform-box: fill-box;
+  
 }
 
 circle:hover {
@@ -254,3 +256,7 @@ circle.selected {
 }
 
   
+input{
+  width: 50%;
+}
+
