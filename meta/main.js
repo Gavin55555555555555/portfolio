@@ -1,4 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from "https://esm.sh/scrollama";
 async function loadData() {
     const data = await d3.csv('loc.csv', (row) => ({
       ...row,
@@ -116,7 +117,7 @@ function renderTooltipContent(commit) {
   date.textContent = commit.datetime?.toLocaleString('en', {
     dateStyle: 'full',
   });
-  //lines.textContent = d.totalLines;
+  lines.textContent = commit.totalLines;
 }
 function updateTooltipVisibility(isVisible) {
   const tooltip = document.getElementById('commit-tooltip');
@@ -211,7 +212,7 @@ function renderLanguageBreakdown(selection) {
 //Plot
 function renderScatterPlot(data, commits) {
   commits = d3.sort(commits, (d) => -d.totalLines);
-  const width = 1000;
+  const width = 800;
   const height = 600;
   const margin = { top: 10, right: 10, bottom: 30, left: 20 };
   const usableArea = {
@@ -401,13 +402,11 @@ function updateCommitInfo(data, commits) {
   }
   mostCommonDay = 0;
   for(let i = 1; i < 7; i++){
-      console.log(weekdays[i]);
       if(weekdays[mostCommonDay] < weekdays[i]){
           mostCommonDay = i;
       }
   }
   mostCommonDay = numToDay[mostCommonDay];
-  console.log(mostCommonDay);
 
 
     
@@ -463,9 +462,8 @@ input.on("input", (event) =>
       .groups(lines, (d) => d.file)
       .map(([name, lines]) => {
       return { name, lines };
-    })
-    .sort((a, b) => b.lines.length - a.lines.length);
-    console.log(files);
+    });
+    files = files.sort((a, b) => b.lines.length - a.lines.length);
 
     d3.select('.files').selectAll('div').remove(); 
     let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
@@ -489,10 +487,11 @@ input.on("input", (event) =>
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
 
+let sorted = d3.sort(commits, d => new Date(d.date));
 
 d3.select('#scatter-story')
   .selectAll('.step')
-  .data(commits)
+  .data(sorted)
   .join('div')
   .attr('class', 'step')
   .html(
@@ -517,6 +516,35 @@ d3.select('#scatter-story')
 
   function onStepEnter(response) {
     console.log(response.element.__data__.datetime);
+    let commitMaxTime = response.element.__data__.datetime
+    let filteredCommits = commits.filter(
+      (commit) => commit.date <= commitMaxTime
+    );
+
+    let lines = filteredCommits.flatMap((d) => d.lines);
+    let files = [];
+    files = d3
+      .groups(lines, (d) => d.file)
+      .map(([name, lines]) => {
+      return { name, lines };
+    });
+    files = files.sort((a, b) => b.lines.length - a.lines.length);
+
+    d3.select('.files').selectAll('div').remove(); 
+    let filesContainer = d3.select('.files').selectAll('div').data(files).enter().append('div');
+    console.log(files);
+    filesContainer.append('dt').append('code').text(d => d.name); 
+    let colors = d3.scaleOrdinal(d3.schemeTableau10);
+    filesContainer.append('dd')
+              .selectAll('div')
+              .data(d =>  d.lines)
+              .join('div')
+              .attr('class', 'line')
+              .attr('style', (d) => `--color: ${colors(d.type)}`);
+              
+    updateScatterPlot(data,filteredCommits);
+    updateCommitInfo(data,filteredCommits);
+
   }
   
   const scroller = scrollama();
