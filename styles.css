@@ -275,7 +275,6 @@ dl.files{
     width: 0.5em;
     aspect-ratio: 1;
     border-radius: 50%;
-    background-color: steelblue;
     background-color: var(--color);
     
   }
@@ -316,4 +315,3 @@ dl.files{
   bottom: auto;
   height: 50vh;
 }
-
